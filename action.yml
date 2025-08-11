@@ -30,6 +30,9 @@ inputs:
   builder:
     default: ""
     description: "The name of the buildx builder to use. If not specified, the currently active builder is used."
+  extract:
+    default: "false"
+    description: "Extract the cache from the docker container (post step). When false, inject the cache (main step)"
 runs:
   using: 'node24'
   main: 'dist/index.js'

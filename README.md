@@ -119,6 +119,31 @@ Alternatively, you can provide a JSON object with additional options that should
           skip-extraction: ${{ steps.cache.outputs.cache-hit }}
 ```
 
+## Action Inputs
+
+The following inputs are available when using this action in a GitHub workflow:
+
+- `cache-map`: JSON formatted map of source paths to container destination paths or mount arguments. If not provided, auto-discovery from Dockerfile is used.
+- `dockerfile`: The Dockerfile to use for auto-discovery of cache-map. Default: `Dockerfile`
+- `cache-dir`: Root directory where cache content is injected from/extracted to when using auto-discovery. If not provided, each cache mount target will be used as source path.
+- `scratch-dir`: Where the action stores temporary files for processing. Default: `scratch`
+- `skip-extraction`: Skip the extraction of the cache from the docker container. Default: `false`
+- `save-always`: Run the post step to save the cache even if another step before fails. Default: `false`
+- `utility-image`: Container image to use for injecting and extracting the cache. Default: `ghcr.io/containerd/busybox:latest`
+- `builder`: The name of the buildx builder. Default: `default`
+- `extract`: Extract the cache from the docker container (post step). When false, inject the cache (main step). Default: `false`
+
+Example using the extract input:
+
+```yaml
+      - name: Extract Docker cache mounts manually
+        uses: reproducible-containers/buildkit-cache-dance@v3
+        with:
+          builder: ${{ steps.setup-buildx.outputs.name }}
+          cache-dir: cache-mount
+          extract: true
+```
+
 ## CLI Usage
 
 In other CI systems, you can run the script directly via `node`:

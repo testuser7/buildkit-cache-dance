@@ -311,3 +311,37 @@ test('getGID with object with gid', () => {
     const gid = getGID(cacheOptions)
     expect(gid).toBe('1000')
 })
+
+test('parseOpts with extract CLI flag', () => {
+    const opts = parseOpts(['--extract'])
+    expect(opts).toEqual({
+        "_": [],
+        "cache-map": "{}",
+        "dockerfile": "Dockerfile",
+        "cache-dir": null,
+        "scratch-dir": "scratch",
+        "skip-extraction": false,
+        "extract": true,
+        "h": false,
+        "help": false,
+        "utility-image": "ghcr.io/containerd/busybox:latest",
+        "builder": ""
+    })
+})
+
+test('parseOpts with extract=false CLI flag', () => {
+    const opts = parseOpts(['--extract', 'false'])
+    expect(opts).toEqual({
+        "_": [],
+        "cache-map": "{}",
+        "dockerfile": "Dockerfile",
+        "cache-dir": null,
+        "scratch-dir": "scratch",
+        "skip-extraction": false,
+        "extract": false,
+        "h": false,
+        "help": false,
+        "utility-image": "ghcr.io/containerd/busybox:latest",
+        "builder": ""
+    })
+})

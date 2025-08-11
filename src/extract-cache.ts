@@ -42,8 +42,14 @@ RUN --mount=${mountArgs} \
     );
 
     // Move Cache into Its Place
-    await run('sudo', ['rm', '-rf', cacheSource]);
-    await fs.rename(path.join(scratchDir, 'dance-cache'), cacheSource);
+    const pathToRename = path.join(scratchDir, 'dance-cache');
+    try {
+        await fs.access(pathToRename);
+        await run('sudo', ['rm', '-rf', cacheSource]);
+        await fs.rename(pathToRename, cacheSource);
+    } catch (e) {
+        console.log(`Nothing to extract for ${cacheSource}, skipping.`);
+    }
 }
 
 export async function extractCaches(opts: Opts) {

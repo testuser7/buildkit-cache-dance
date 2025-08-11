@@ -27,7 +27,14 @@ export function parseOpts(args: string[]): mri.Argv<Opts> {
       "cache-dir": getInput("cache-dir") || null,
       "scratch-dir": getInput("scratch-dir") || "scratch",
       "skip-extraction": (getInput("skip-extraction") || "false") === "true",
-      "extract": process.env[`STATE_POST`] !== undefined,
+      "extract": (() => {
+        // Priority: CLI flag > Action input > STATE_POST environment variable
+        const actionInput = getInput("extract");
+        if (actionInput !== "" && actionInput !== undefined) {
+          return actionInput === "true";
+        }
+        return process.env[`STATE_POST`] !== undefined;
+      })(),
       "utility-image": getInput("utility-image") || "ghcr.io/containerd/busybox:latest",
       "builder": getInput("builder"),
       "help": false,
