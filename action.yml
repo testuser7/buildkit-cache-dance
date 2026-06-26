@@ -37,4 +37,4 @@ runs:
   using: 'node24'
   main: 'dist/index.js'
   post: 'dist/index.js'
-  post-if: 'success() || github.event.inputs.save-always'
+  post-if: "success() || inputs.save-always"
